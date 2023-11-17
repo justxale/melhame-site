@@ -1,0 +1,283 @@
+$.ajaxPrefilter(function (options, originalOptions, jqXHR) { options.async = true; });
+
+const BootstrapSwal = Swal.mixin({
+	customClass: {
+		confirmButton: 'btn btn-primary',
+		cancelButton: 'btn btn-outline-secondary',
+		denyButton: 'btn btn-danger',
+	},
+	buttonsStyling: false
+});
+
+const Toast = Swal.mixin({
+	toast: true,
+	position: 'top-end',
+	iconColor: 'white',
+	customClass: {
+		popup: 'colored-toast'
+	},
+	showConfirmButton: false,
+	timer: 3000,
+	timerProgressBar: true,
+	didOpen: (toast) => {
+		toast.addEventListener('mouseenter', Swal.stopTimer)
+		toast.addEventListener('mouseleave', Swal.resumeTimer)
+	}
+});
+
+let languageCode;
+
+$.ajax({
+	url: `${window.location.protocol}//${window.location.hostname}/get-language-code`,
+	type: 'GET',
+	dataType: 'json',
+	success: function (data) {
+		languageCode = data.languageCode;
+	}
+});
+
+/**
+ * Функция перевода для JS
+ * 
+ * @param {string} text
+ */
+function _t(text) {
+	if (!languageCode || languageCode == 'ru' || !languages)
+		return text;
+
+	let currentLanguageTranslations = languages.get(languageCode)
+
+	if (!currentLanguageTranslations)
+		return text;
+
+	let translation = currentLanguageTranslations.get(text);
+
+	return translation ? translation : text;
+}
+
+/**
+ * Слияение основных переводов с переводами сервиса по каждому из языков
+ * 
+ * @param {Map} serviceLanguages переводы для конкретного сервиса
+ */
+function mergeLanguages(serviceLanguages) {
+	serviceLanguages.forEach((value, key) => {
+		let language = languages.get(key);
+		if (language.size > 0) {
+			languages.set(key, new Map([...language, ...value]));
+		} else {
+			languages.set(key, value);
+		}
+	});
+}
+
+function userRefreshAuthToken(datetime) {
+	let time = (datetime * 1000) - (new Date()).getTime();
+
+	const refreshToken = function () {
+		miniAction('/student/auth-token-refresh', function (res) {
+			if (res) {
+				userRefreshAuthToken(res);
+			}
+		}, {}, { async: true });
+	};
+
+	if (time <= 0) {
+		refreshToken();
+	} else {
+		setTimeout(refreshToken, time);
+	}
+}
+
+function renderAdaptiveElements() {
+	let breadcrumbsHeight = $('#breadcrumbs').outerHeight(true);
+	let footerHeight = $('.footer-wrap').outerHeight(true);
+	let windowHeight = $(window).height();
+
+	if ($('body').outerWidth(true) > 999) {
+		$('aside').removeClass('open');
+		$('aside').fadeIn();
+	}
+
+	if ($('body').outerWidth(true) < 999) {
+		if ($('html').hasClass('iphone')) {
+			if ($('aside').hasClass('open')) {
+				$('.header-search-input').width($('.asidemenu').outerWidth(true) - 54);
+			}
+			else {
+				$('.header-search-input').css('width', '');
+			}
+		}
+	}
+
+	if ($('body').outerWidth(true) < 400) {
+		$('#brs-add-widget').html('+');
+	} else {
+		$('#brs-add-widget').html($('#brs-add-widget').attr("title"));
+	}
+
+	$('.pagewrapper').css({
+		'min-height': windowHeight - breadcrumbsHeight - footerHeight + 'px'
+	});
+}
+
+/**
+ * сворачивание списка сервисов в левом меню
+ * @returns `false` чтобы предотвратить переход по ссылке
+ */
+function displaying() {
+	// раскрытие списка с анимацией
+    $("ul.asidemenu > li > ul.active").slideToggle('open');
+	// визуализация открытого списка в ссылке
+	$("ul.asidemenu > li > a#active")[0].classList.toggle('open');
+    return false;
+}
+
+$(document).ready(function () {
+	$('.confirm-link').on('click', function (e) {
+		e.preventDefault();
+
+		let message = $(this).attr('data-message');
+		BootstrapSwal.fire({
+			text: message ? message : 'Вы действительно хотите выполнить это действие?',
+			confirmButtonText: 'Да',
+			denyButtonText: 'Нет',
+			icon: 'question',
+			showDenyButton: true,
+			showCloseButton: true
+		}).then((result) => {
+			if (result.isConfirmed) {
+				document.location.href = $(this).attr('href');
+			}
+		});
+	});
+
+	if (isTouchSupport()) {
+		$(document.body).addClass('touch-support');
+	}
+
+	$('body').on('click', '.summary', function () {
+		let $this = $(this);
+		if ($this.hasClass('active')) {
+			$this.next('.details').slideToggle(500, function () {
+				$this.toggleClass('active');
+			});
+		} else {
+			$this.next('.details').slideToggle(500);
+			$this.toggleClass('active');
+		}
+	});
+
+	$('.js-auth-window-link').on('click', function () {
+		let windowWidth = 600;
+		let windowHeight = 630;
+
+		let authWindow = window.open(
+			'/auth',
+			'auth_window',
+			'left=' + ((screen.width - windowWidth) / 2) + ',top=' + ((screen.height - windowHeight) / 2) + ',width=' + windowWidth + ',height=' + windowHeight + ',menubar=no,toolbar=no,location=no,directories=no,status=no,resizable=yes,scrollbars=yes'
+		);
+
+		authWindow.focus()
+
+		return false;
+	});
+
+	$('.language-select').click(function () {
+		if ($(this).hasClass('open')) {
+			$(this).removeClass('open');
+		} else {
+			$(this).addClass('open');
+		}
+	});
+
+	$('.burger').click(function (e) {
+		e.preventDefault();
+		$(this).toggleClass('open');
+		$('aside').slideToggle();
+	});
+
+	const hideLang = function (e) {
+		if (!$(e.target).closest('aside, .burger,.language-select').length) {
+			$('aside').removeClass('open');
+			$('.burger').removeClass('open');
+			$('.language-select').removeClass('open');
+		}
+	};
+
+	$(document).on('click', hideLang);
+
+	$('.layer-close, .shadow-layer, .cancel-close, .layer').bind('click', function (event) {
+		event.preventDefault();
+
+		if ($('#layer-help-me').hasClass('layer-open')) {
+			$('#layer-help').effect('transfer', {
+				to: $('#windowOpen')
+			}, 800);
+		}
+		$('.layer, .shadow-layer').fadeOut(200);
+		$('.layer').removeClass('layer-open');
+	});
+
+	$('.layer-in').click(function (e) {
+		e.stopPropagation();
+	});
+
+	$('a[data-show], span[data-show], button[data-show], input[data-show], div[data-show]').each(function () {
+		$(this).click(function (event) {
+			event.preventDefault();
+
+			$('.layer').fadeOut(200);
+			
+			let $layer = $('#' + $(this).attr('data-show'));
+			$layer.addClass('layer-open');
+
+			if (($(window).scrollTop() + $(window).height() / 2) > ($layer.height() / 2)) {
+				$layer.css('margin-top', -1 * $layer.height() / 2);
+				$layer.css('top', $(window).scrollTop() + $(window).height() / 2);
+			}
+			else {
+				$layer.css('margin-top', '10px');
+				$layer.css('top', '20px');
+			}
+
+			$layer.fadeIn(200);
+			$('.shadow-layer').fadeIn(200);
+		});
+	});
+
+	$('.click').click(function () {
+		if ($('.traxs-body-menu').attr('class') != 'traxs-body-menu open') {
+			$('.traxs-body-menu').addClass('open');
+			$('.traxs-body-menu').css('display', 'block');
+		}
+		else {
+			$('.traxs-body-menu').removeClass('open');
+			$('.traxs-body-menu').css('display', 'none');
+		}
+	});
+
+	$('.values-list').each(function () {
+		if ($(this).outerHeight(true) > 400) {
+			$(this).css({ 'overflow-y': 'scroll' });
+		}
+	});
+
+	$('.add-widget').on('click', function () {
+        let $this = $(this);
+
+        $('body').css('cursor', 'progress');
+        miniAction('/student/widget-add', function (result) {
+            $('body').css('cursor', 'default');
+            if (result) {
+                $this.addClass('active');
+                $this.text(_t('Добавлен'));
+				$this.attr("title", "Добавлен")
+            }
+        }, { service_id: $this.data('id') });
+    });
+
+	renderAdaptiveElements();
+});
+
+$(window).resize(renderAdaptiveElements);

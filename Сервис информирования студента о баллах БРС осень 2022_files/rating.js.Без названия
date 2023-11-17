@@ -1,0 +1,20 @@
+document.addEventListener('DOMContentLoaded', function () {
+	var process = function (isHidden) {
+		var rows = document.querySelectorAll('[data-discipline-is-non-selected="1"]');
+		for (var i = 0; i < rows.length; ++i) {
+			var row = rows[i];
+			row.style.display = isHidden ? 'none' : 'block';
+		}
+	};
+	var checkbox = document.getElementById('hideNonSelectedDisciplines');
+	checkbox.oninput = function (e) {
+		var checked = e.target.checked;
+		localStorage.setItem('hideNonSelectedDisciplinesInRating', checked);
+		process(checked);
+	};
+	var storedValue = localStorage.getItem('hideNonSelectedDisciplinesInRating');
+	if (storedValue !== null) {
+		checkbox.checked = storedValue;
+		process(storedValue);
+	}
+});

@@ -1,0 +1,149 @@
+.selection-block-counter {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 15px;
+    line-height: initial;
+}
+
+.selection-block {
+    font: 13px/18px 'Open Sans';
+    font-weight: 700;
+    margin: 0 0 10px;
+    padding: 0.1rem 0.125em 0.75rem;
+    border-bottom: 1px solid #ccc;
+}
+
+.selection-block .category-dropdown {
+    margin-right: 40px
+}
+
+.selection-block .show {
+    font: 14px/14px 'Open Sans';
+    vertical-align: middle;
+    margin-right: 10px
+}
+
+.selection-block .select a {
+    color: #111;
+    display: block;
+    height: 34px;
+}
+
+.selection-block .select a.active {
+    color: #00aeef;
+    text-decoration: none
+}
+
+.selection-block .select a:hover {
+    text-decoration: none
+}
+
+.selection-block .select {
+    background: #fff;
+    color: #111;
+    display: inline-block;
+    height: 35px;
+    font: 14px/34px 'Open Sans';
+    border: 1px #eee solid;
+    border-radius: 3px;
+    position: relative;
+    z-index: 1;
+    vertical-align: middle;
+    width: fit-content;
+}
+
+.selection-block .select.open {
+    border: 1px solid #c1c1c1;
+    z-index: 2
+}
+
+.category-value {
+    cursor: pointer
+}
+
+.selection-block .valueshow {
+    white-space: nowrap;
+    user-select: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 70px;
+    height: fit-content;
+    margin: -0.5px 0;
+    display: inline-block
+}
+
+.selection-block .valueshow {
+    width: fit-content;
+    padding: 0 40px 0 12px;
+}
+
+.selection-block .dropdown-item.group {
+    width: fit-content;
+}
+
+.selection-block .select::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 9px;
+    right: 8px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-caret-down-fill' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    width: 16px;
+    height: 16px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.selection-block .select.open::after {
+    transform: rotate(180deg);
+}
+
+.selection-block .values-list p {
+    margin: 0
+}
+
+.selection-block .values-list a {
+    color: #111;
+    width: 100%;
+    display: inline-block;
+    font-size: 14px;
+    padding: 0px 12px;
+}
+
+.selection-block .values-list a:hover,
+.selection-block .values-list a.active {
+    background: #e50079;
+    color: white;
+}
+
+.selection-block .values-list {
+    box-sizing: border-box;
+    width: 100%;
+    border: 1px #d7d7d7 solid;
+    position: relative;
+    margin-top: -1px;
+    display: none;
+    background: #fff;
+    margin-right: -100%;
+    float: left;
+    overflow: hidden;
+    max-height: 400px
+}
+
+@media only screen and (max-width:749px) {
+    .selection-block .values-list a {
+        padding: 9px 12px;
+    }
+
+    .selection-block .select {
+        font: 13px/34px 'Open Sans';
+    }
+
+    .selection-block .show {
+        font: 13px/13px 'Open Sans';
+    }
+
+    .selection-block .values-list a {
+        font-size: 13px;
+    }
+}

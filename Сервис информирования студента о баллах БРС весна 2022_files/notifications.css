@@ -1,0 +1,345 @@
+.task-border {
+    text-align: left;
+    border: 1.5px solid #e50079;
+    border-radius: 0.375rem;
+    background-color: #fff;
+    box-shadow: 0 1px 5px #d5d5d559;
+    margin-bottom: 15px;
+    position: relative;
+    display: block;
+    transition: all .25s ease-in-out;
+}
+
+.all-tasks-border .task-border:active,
+.all-tasks-border .task-border:hover {
+    border: 1.5px solid #e50079;
+}
+
+.aside-inform .task-border:hover,
+.widget-inner .task-border:hover,
+.aside-inform .task-border:active,
+.widget-inner .task-border:active {
+    color: #e50079;
+    border: 1.5px solid #e50079;
+}
+
+.task-border.yellow {
+    border-color: #f6c004
+}
+
+.task-border.complete {
+    border-color: #33ab00;
+}
+
+.task-border.gray {
+    border-color: #ccc
+}
+
+.task-border.blue {
+    border-color: #0004ff
+}
+
+.task-border.closed {
+    border-color: #ccc;
+    color: gray
+}
+
+.this-important {
+    top: -15px;
+    left: -2px;
+}
+
+.aside-inform .this-important {
+    left: -2.25px;
+}
+
+.all-tasks-border  .study-in-subjects .task-border .task-inner .discipline-title
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    width:70%;
+}
+
+.all-tasks-border  .study-in-subjects .task-border .task-inner .final-number
+{
+    position:absolute; 
+    right:28px; 
+    top:28px;
+}
+
+.all-tasks-border  .study-in-subjects .task-border .task-inner .final-grade
+{
+    font-size:14px; 
+    color:grey; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    width:70%;
+}
+
+@-moz-document url-prefix() {
+    .this-important {
+        left: -1.75px;
+    }
+
+    .widget-inner .this-important,
+    .aside-inform .this-important {
+        left: -1.5px;
+    }
+}
+
+.task-header {
+    width: calc(100% - 130px);
+    table-layout: fixed;
+    cursor: pointer;
+    font-size: 0.975rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    margin-right: 15px;
+}
+
+.task-time {
+    font-size: 0.775rem;
+    line-height: 1rem;
+    width: 115px;
+    text-align: right
+}
+
+.task-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    cursor: pointer
+}
+
+.task-text-block {
+    padding-top: 2px
+}
+
+.task-text {
+    font-size: 0.925rem;
+    margin-bottom: 1rem;
+}
+
+span.complete {
+    display: inline-block;
+    position: relative;
+    color: #33ab00;
+}
+
+.task-submit-wrap {
+    margin-bottom: 1rem;
+}
+
+.task-submit-wrap .button {
+    min-width: 200px;
+    font-size: 0.925rem;
+    text-align: center;
+}
+
+.pagination {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.pagination a {
+    display: inline-block;
+    vertical-align: top;
+    border-radius: 0.375rem;
+    padding: 7px 8px;
+    font-size: 14px;
+    line-height: 14px;
+    color: #2e92d5;
+    margin-right: 5px;
+    text-decoration: none
+}
+
+.pagination a:hover {
+    background: #e5e5e5;
+    text-decoration: none;
+    color: #676767;
+}
+
+.pagination a.active {
+    background: #e50079;
+    color: #fff
+}
+
+.all-tasks-border {
+    margin-bottom: 1.5rem;
+}
+
+@media only screen and (max-width: 749px) {
+    .task-time {
+        font-size: 0.875rem;
+    }
+
+    .widget-inner .this-important,
+    .aside-inform .this-important {
+        top: -14.5px;
+    }
+}
+
+@media only screen and (max-width: 550px) {
+    .task-inner {
+        display: block;
+    }
+
+    .task-time {
+        width: 100%;
+        margin-top: 0.75rem;
+        text-align: center;
+        font-size: 0.925rem;
+    }
+
+    .task-header {
+        font-size: 1rem;
+        width: 100%;
+        margin-right: 0;
+        line-height: 1.325rem;
+        text-align: center;
+    }
+
+}
+
+a.task-border {
+    color: #111;
+    text-decoration: none;
+}
+
+a.task-border:hover {
+    text-decoration: none;
+}
+
+.widget-inner .all-tasks-border {
+    padding-top: 1px;
+    padding-left: 1px;
+    margin-bottom: 0;
+}
+
+.widget-inner .task-border {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.widget-inner .task-border:last-of-type {
+    margin-bottom: 0.125rem;
+}
+
+.aside-inform {
+    width: 280px;
+    height: 370px;
+    margin: 1rem auto;
+    background: #fff;
+    box-sizing: border-box;
+    box-shadow: 0 0 5px 0 rgba(220, 220, 220, 1);
+    padding: 0.875rem;
+    border-radius: 0.375rem;
+}
+
+.aside-inform .task-border {
+    font-size: 0.875rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.aside-inform .task-border:last-child {
+    margin-bottom: 0.125rem;
+}
+
+.widget-inner .task-header,
+.aside-inform .task-header {
+    font-size: 0.875rem;
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0.175rem;
+}
+
+.widget-inner .task-time,
+.aside-inform .task-time {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    display: block;
+    text-align: left;
+}
+
+.aside-inform-header {
+    font-size: 1.175rem;
+    text-align: center;
+    border-bottom: 1px solid #cccc;
+    padding-bottom: 0.625rem;
+    margin-bottom: 0.625rem;
+}
+
+.aside-inform .all-tasks-border {
+    height: calc(100% - 3rem);
+    overflow: auto;
+    padding-top: 1px;
+    padding-left: 1px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.task-border.complete .task-header,
+.task-border.viewed .task-header {
+    font-weight: 400;
+}
+
+.task-border,
+.aside-inform .task-border {
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.task-border.important {
+    padding-top: 5px;
+    margin-top: 20px;
+}
+
+.aside-inform .task-border.important,
+.widget-inner .task-border.important {
+    padding-top: 5px;
+    margin-top: 0.875rem;
+    margin-bottom: 20px;
+}
+
+.task-border .task-inner {
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.widget-inner .task-border .task-inner,
+.aside-inform .task-border .task-inner {
+    display: block;
+}
+
+.task-border .task-text-block {
+    display: none;
+    margin: 0 0.75rem;
+    padding: 0.75rem 0.5rem 0;
+    border-top: 1px solid #dadada;
+    box-sizing: border-box;
+}
+
+@media only screen and (max-width: 749px) {
+    .task-border {
+        padding-top: 0;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .task-border.important {
+        padding-top: 5px;
+        margin-top: 22px;
+    }
+}
+
+@media only screen and (max-width:370px) {
+    .task-submit-wrap {
+        text-align: center;
+    }
+}

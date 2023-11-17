@@ -1,0 +1,47 @@
+$(document).ready(function () {
+    var hideDropdown = function (e) {
+        if (e !== undefined) {
+            var dropdown = $('.category-dropdown');
+            var speed = 'fast';
+            if (dropdown.hasClass('open')) {
+                $('.values-list', dropdown).slideUp(speed, function () {
+                    dropdown.removeClass('open');
+                });
+            }
+            e.stopPropagation();
+        } else {
+            $('.category-dropdown').each(function () {
+                if ($(this).hasClass('open')) {
+                    $('.values-list', $(this)).slideUp('fast')
+                    $(this).removeClass('open');
+                }
+            });
+        }
+    };
+
+    var onDropdownClick = function (e) {
+        if (e !== undefined) {
+            var $this = $(e.currentTarget);
+            var dropdown = $this.parents('.category-dropdown:first');
+            var speed = 'fast';
+            if (dropdown.hasClass('open')) {
+                $('.values-list', dropdown).slideUp(speed, function () {
+                    dropdown.removeClass('open');
+                });
+            } else {
+                dropdown.addClass('open');
+                $('.values-list', dropdown).slideDown(speed);
+            }
+            e.stopPropagation();
+        }
+    };
+
+    $(document).on('click', hideDropdown);
+
+    $(document).on('click', '.dropdown-item', function (e) {
+        if (!$(this).parents('.category-dropdown:first').hasClass('open')) {
+            hideDropdown();
+            onDropdownClick(e);
+        }
+    });
+});

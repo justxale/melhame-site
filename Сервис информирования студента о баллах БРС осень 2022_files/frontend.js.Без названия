@@ -1,0 +1,62 @@
+$(document).ready(function () {
+    $('.js-service-rating-link').on('click', function () {
+        let $ratingLink = $(this);
+        let $disciplineInfo = $(`#info-${this.id}`);
+
+        if ($ratingLink.hasClass('info-open')) {
+            $disciplineInfo.addClass('hidden');
+            $disciplineInfo.removeClass('show');
+            $ratingLink.removeClass('info-open');
+            $ratingLink.addClass('info-close');
+
+            return;
+        }
+
+        if ($ratingLink.hasClass('info-close'))
+            $ratingLink.removeClass('info-close');
+
+        if ($disciplineInfo.hasClass('hidden'))
+            $disciplineInfo.removeClass('hidden');
+
+        $ratingLink.addClass('info-open');
+
+        if ($disciplineInfo.html() == '') {
+            $disciplineInfo.addClass('loading');
+            $.ajax({
+                type: 'GET',
+                url: `${document.location.pathname}/discipline?discipline_id=${this.id}`,
+                dataType: 'html',
+                success: function (data) {
+                    $disciplineInfo.addClass('show');
+                    $disciplineInfo.removeClass('loading');
+                    $disciplineInfo.html(data);
+                },
+                error: function () {
+                    $disciplineInfo.removeClass('loading');
+                    $disciplineInfo.addClass('hidden');
+                    $ratingLink.removeClass('info-open');
+                    Toast.fire({
+                        icon: 'error',
+                        text: _t('Произошла непредвиденная ошибка')
+                    });
+                }
+            });
+        } else {
+            $disciplineInfo.addClass('show');
+        }
+    });
+
+    /** раскрывающиеся меню на странице БРС  **/
+    $('body').on('click', '.brs-slide-pane', function () {
+        $(this).parent().parent().toggleClass('open');
+    });
+
+    /** раскрывающийся список преподавателей на странице БРС  **/
+    $('body').on('click', '.brs-slide-pane-small', function () {
+        $(this).toggleClass('open');
+
+        var $container = $(this).parent().children('.all-lecturers');
+
+        $container.toggleClass('open');
+    });
+});
